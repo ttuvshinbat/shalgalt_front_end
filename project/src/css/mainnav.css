@@ -1,0 +1,23 @@
+.mainNav {
+  background-color: #af7eeb;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 392px;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  height: 80px;
+}
+p {
+  margin: 0 !important;
+}
+.stat {
+  background-color: #7e51b5;
+  width: 61px;
+  height: 36px;
+  border-radius: 50px;
+}
+.pi {
+  font-size: 14px;
+  line-height: 21px !important;
+}
