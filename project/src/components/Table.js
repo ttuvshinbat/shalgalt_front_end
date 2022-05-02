@@ -44,7 +44,7 @@ function Table() {
   const [render, setRender] = useState(false);
 
   useEffect(() => {
-    fetch("http://52.221.185.255:3001/api", {
+    fetch("http://localhost:3001/api", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,20 +53,21 @@ function Table() {
       .then((data) => data.json())
       .then((data) => setData(data.data));
   }, [render]);
+  console.log(data)
   function create(event) {
     event.preventDefault();
     console.log(event.target[0].value);
     let name1 = event.target[0].value;
     console.log(typeof name1);
 
-    fetch(`http://52.221.185.255:3001/api/create`, {
+    fetch("http://localhost:3001/api/create", {
       method: "POST",
-      header: {
+      headers: {
         "Content-Type": "application/json",
       },
-      body: {
+      body: JSON.stringify({
         name: name1,
-      },
+      })
     })
       .then((data) => data.json())
       .then((data) => {
@@ -82,11 +83,29 @@ function Table() {
           function del() {
             const id = data._id;
 
-            fetch(`http://52.221.185.255:3001/api/delete/${id}`, {
+            fetch(`http://localhost:3001/api/delete/${id}`, {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",
               },
+            })
+              .then((data) => data.json())
+              .then((data) => {
+                setRender(!render);
+                console.log(data);
+              });
+          }
+          function update() {
+            const id = data._id;
+
+            fetch(`http://localhost:3001/api/update/${id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: "hello ",
+              })
             })
               .then((data) => data.json())
               .then((data) => {
@@ -101,11 +120,11 @@ function Table() {
                 className="d-flex justify-content-between tColor"
                 key={i}
               >
-                <Form.Check type="radio" />
+                <Form.Check type="radio" isValid />
 
                 {data.name}
                 <div className="icons d-flex justify-content-between">
-                  <div className="edit me-3">{edit}</div>
+                  <div onClick={update} className="edit me-3">{edit}</div>
 
                   <div onClick={del} className="trash">
                     {trash}
