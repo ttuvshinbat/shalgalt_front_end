@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import "../css/mainback.css";
 
 function Table() {
+
   const edit = (
     <svg
       width="20"
@@ -42,8 +43,12 @@ function Table() {
 
   const [data, setData] = useState([]);
   const [render, setRender] = useState(false);
+  const [togle, setTogle] = useState({ checked: false, id: 1 })
+  console.log(togle.checked)
+
 
   useEffect(() => {
+
     fetch("http://localhost:3001/api", {
       method: "GET",
       headers: {
@@ -52,7 +57,7 @@ function Table() {
     })
       .then((data) => data.json())
       .then((data) => setData(data.data));
-  }, [render]);
+  }, [render,]);
   console.log(data)
   function create(event) {
     event.preventDefault();
@@ -76,65 +81,84 @@ function Table() {
       });
   }
 
+
   return (
     <div className="mainBack">
       <ListGroup variant="flush">
-        {data.map((data, i) => {
-          function del() {
-            const id = data._id;
-
-            fetch(`http://localhost:3001/api/delete/${id}`, {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((data) => data.json())
-              .then((data) => {
-                setRender(!render);
-                console.log(data);
-              });
-          }
-          function update() {
-            const id = data._id;
-
-            fetch(`http://localhost:3001/api/update/${id}`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: "hello ",
-              })
-            })
-              .then((data) => data.json())
-              .then((data) => {
-                setRender(!render);
-                console.log(data);
-              });
-          }
-
-          return (
-            <div>
-              <ListGroup.Item
-                className="d-flex justify-content-between tColor"
-                key={i}
-              >
-                <Form.Check type="radio" isValid />
-
-                {data.name}
-                <div className="icons d-flex justify-content-between">
-                  <div onClick={update} className="edit me-3">{edit}</div>
-
-                  <div onClick={del} className="trash">
-                    {trash}
-                  </div>
-                </div>
-              </ListGroup.Item>
-            </div>
-          );
-        })}
         <Form onSubmit={create}>
+          {data.map((data) => {
+            function del() {
+              const id = data._id;
+
+              fetch(`http://localhost:3001/api/delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((data) => data.json())
+                .then((data) => {
+                  setRender(!render);
+                  console.log(data);
+                });
+            }
+            function update() {
+              const id = data._id;
+
+              fetch(`http://localhost:3001/api/update/${id}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: "hello ",
+                })
+              })
+                .then((data) => data.json())
+                .then((data) => {
+                  setRender(!render);
+                  console.log(data);
+                });
+            }
+
+            let songolt = `${data.name}`
+            let songolt2 = <del>{songolt}</del>
+            return (
+              <div key={data._id} >
+                <ListGroup.Item
+                  className="d-flex justify-content-between tColor"
+
+                >
+                  <Form.Check type="checkbox" name="checkbox" id={data._id} onChange={(e) => {
+                    let checked
+                    setTogle({ checked: e.target.checked, id: data._id })
+
+                  }} isValid />
+
+                  {togle.checked === true && togle.id === data._id ? songolt2 : songolt}
+                  <div className="icons d-flex justify-content-between">
+                    <div onClick={update} className="edit me-3">{edit}</div>
+
+                    <div onClick={del} className="trash">
+                      {trash}
+                    </div>
+                  </div>
+                </ListGroup.Item>
+              </div>
+            );
+
+
+
+
+
+
+
+
+
+
+
+          })}
+
           <FormControl
             className="border"
             placeholder="What's next ?"

@@ -10,10 +10,13 @@ function App() {
 
 
   return (
-    <div className="app">
+    <div className="App ">
+      <div className="all me-auto">
+        <Nav />
+        <Table />
+      </div>
 
-      <Nav />
-      <Table />
+
     </div>
   );
 }
